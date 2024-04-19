@@ -42,4 +42,9 @@
         android:name="com.ubaya.hobbyapp.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/itemProfile"
+        android:name="com.ubaya.hobbyapp.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
