@@ -43,7 +43,7 @@ class HobbyListAdapter(var listHobby:ArrayList<Hobby>):RecyclerView.Adapter<Hobb
             txtAuth.text = "@" + listHobby[position].author
             txtDesc.text = listHobby[position].description
             btnRead.setOnClickListener {
-                val action = HomeFragmentDirections.actionDetailFragment()
+                val action = HomeFragmentDirections.actionDetailFragment(listHobby[position].id.toString())
                 Navigation.findNavController(it).navigate(action)
             }
         }

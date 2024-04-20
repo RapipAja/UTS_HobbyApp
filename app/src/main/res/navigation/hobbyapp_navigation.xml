@@ -15,10 +15,10 @@
             app:destination="@id/createAccFragment" />
         <action
             android:id="@+id/action_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/itemHome" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/itemHome"
         android:name="com.ubaya.hobbyapp.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
@@ -41,10 +41,18 @@
         android:id="@+id/detailFragment"
         android:name="com.ubaya.hobbyapp.view.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/itemProfile"
         android:name="com.ubaya.hobbyapp.view.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_logout_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

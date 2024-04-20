@@ -46,7 +46,7 @@ class HobbyViewModel(application: Application): AndroidViewModel(application) {
         queue?.add(stringRequest)
     }
 
-    fun detail(id:String){
+    fun detailHobby(id:String){
         queue = Volley.newRequestQueue(getApplication())
         val url = "http://10.0.2.2/UTS_ANMP/HobbyApp/detail.php?id=${id}"
 
