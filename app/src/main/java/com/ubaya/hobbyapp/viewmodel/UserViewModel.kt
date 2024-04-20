@@ -13,6 +13,7 @@ import com.ubaya.hobbyapp.model.User
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
     val userLD = MutableLiveData<User>()
+    val loginLD = MutableLiveData<Boolean>()
     val createLD = MutableLiveData<Boolean>()
     val updateLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
@@ -24,13 +25,24 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 
         val stringRequest = object : StringRequest(
             Method.POST, url, { response->
-                userLD.value = Gson().fromJson(response, User::class.java)
+                try {
+                    val logUser = Gson().fromJson(response, User::class.java)
 
-                Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
-                Log.d("Success", "Response: ${response}")
+                    if (logUser == null || logUser.id.isNullOrEmpty()){
+                        loginLD.value = false
+                    } else {
+                        userLD.value = logUser
+                        loginLD.value = true
+                    }
+                } catch (e: Exception){
+                    loginLD.value = false
+                    Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
+                    Log.e("Success", "Response: ${response}", e)
+                }
             }, {
+                loginLD.value = false
                 Toast.makeText(getApplication(), "Login Failed", Toast.LENGTH_SHORT).show()
-                Log.d("login error", it.toString())
+                Log.e("login error", "Error: ${it.message}", it)
             }
         )
         {

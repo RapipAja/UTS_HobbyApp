@@ -38,31 +38,42 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnLogin.setOnClickListener {
-            viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-            viewModel.loginCheck(binding.txtUser.text.toString(), binding.txtPass.text.toString())
 
-            val account = requireActivity().getSharedPreferences("saveUser", Context.MODE_PRIVATE)
-            val loginVal = account.edit()
+            var username = binding.txtUser.text.toString()
+            var pass = binding.txtPass.text.toString()
 
-            viewModel.userLD.observe(viewLifecycleOwner, Observer {
-                var login = it
+            if (username.isNotEmpty() && pass.isNotEmpty()) {
+                viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+                viewModel.loginCheck(
+                    binding.txtUser.text.toString(),
+                    binding.txtPass.text.toString()
+                )
 
-                if (login != null) {
-                    loginVal.putString("id", login.id)
-                    loginVal.putString("first_name", login.firstname)
-                    loginVal.putString("last_name", login.lastname)
-                    loginVal.putString("pass", login.password)
-                    loginVal.putString("picture", login.picture)
-                    loginVal.apply()
+                viewModel.loginLD.observe(viewLifecycleOwner, Observer {success->
+                    if (success) {
+                        val account = requireActivity().getSharedPreferences("saveUser", Context.MODE_PRIVATE)
+                        val loginVal = account.edit()
 
-                    mainActivity.navShow()
-                    val action = LoginFragmentDirections.actionHomeFragment()
-                    Navigation.findNavController(view).navigate(action)
-                }
-                else {
-                    Toast.makeText(activity, "Username or Password not found", Toast.LENGTH_SHORT).show()
-                }
-            })
+                        viewModel.userLD.value?.let { login->
+                            loginVal.putString("id", login.id)
+                            loginVal.putString("first_name", login.firstname)
+                            loginVal.putString("last_name", login.lastname)
+                            loginVal.putString("pass", login.password)
+                            loginVal.putString("picture", login.picture)
+                            loginVal.apply()
+                        }
+                        mainActivity.navShow()
+                        val action = LoginFragmentDirections.actionHomeFragment()
+                        Navigation.findNavController(view).navigate(action)
+                    }
+                    else{
+                        Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            else{
+                Toast.makeText(requireContext(), "Please enter corect username anda password", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnCreateAcc.setOnClickListener {
